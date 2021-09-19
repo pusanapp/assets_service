@@ -140,7 +140,79 @@ const uploadIcons = async (req, res, next) => {
     }
 }
 
+const uploadBanner = async (req, res, next) => {
+    const filePath = path.join(__dirname, '../public/banner/')
+    console.log("DIR", filePath)
+    try {
+        if (!req.files) {
+            res.send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        } else {
+            let imagesUploaded = req.files.banner;
+            const isArray = Array.isArray(imagesUploaded);
+            console.log(isArray)
+            if (isArray) {
+                console.log("upload Multiple")
+                const paths = []
+                imagesUploaded.map(async (file) => {
+                    const fileName = file.name
+                    await file.mv(`${filePath}${fileName}`, async (err) => {
+                        if (err) {
+                            res.send({
+                                status: false,
+                                message: err.message
+                            })
+                        }
+                        console.log('upload mas ', `${filePath}${fileName}`)
+                        paths.push(`${url.server}/banner/${fileName}`)
+                        if (imagesUploaded.length === paths.length) {
+                            console.log('SAMA')
+                            // console.log(Array.isArray(paths))
+                            res.send({
+                                status: true,
+                                message: 'Upload Banner Success',
+                                data: paths
+                            })
+                        }
+                    })
+
+                })
+            } else {
+                // console.log("Upload Single")
+                console.log(imagesUploaded)
+                // const fileKu = `${filePath}`
+                console.log('hehe ', filePath)
+
+
+                let imageName = imagesUploaded.name;
+                await imagesUploaded.mv(`${filePath}${imageName}`, async (err) => {
+                    if (err) {
+                        console.log('err, ' + err.message)
+                        res.send({err2: err.message})
+                    }
+                    res.send({
+                        status: true,
+                        message: 'Upload Banner Success',
+                        data: [
+                            `${url.server}/banner/${imageName}`
+                        ]
+                    })
+
+                })
+            }
+        }
+
+
+    } catch (e) {
+        res.status(500).send({error: e.message});
+
+    }
+}
+
 module.exports = {
     uploadImages,
-    uploadIcons
+    uploadIcons,
+    uploadBanner
 }

@@ -10,5 +10,6 @@ router.get('/', function(req, res, next) {
 
 router.post('/image/upload', uploadController.uploadImages)
 router.post('/icon/upload', uploadController.uploadIcons)
+router.post('/banner/upload', uploadController.uploadBanner)
 
 module.exports = router;
