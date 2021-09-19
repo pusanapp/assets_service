@@ -1,5 +1,6 @@
 const path = require('path');
 const {url} = require('../utils/global_url')
+const sharp = require('sharp')
 const uploadImages = async (req, res, next) => {
     const filePath = path.join(__dirname, '../public/images/')
     console.log("DIR", filePath)
@@ -18,12 +19,12 @@ const uploadImages = async (req, res, next) => {
                 const paths = []
                 imagesUploaded.map(async (file) => {
                     const fileName = file.name
-                    await file.mv(`${filePath}${fileName}`, async (err) => {
-                        if (err) {
-                            res.send({
-                                status: false,
-                                message: err.message
-                            })
+                    await sharp(file.data).resize({
+                        width: 600,
+                    }).toFile(`${filePath}${fileName}`,(err, info) => {
+                        console.log(info)
+                        if(err){
+                            res.send({err: err})
                         }
                         console.log('upload mas ', `${filePath}${fileName}`)
                         paths.push(`${url.server}/images/${fileName}`)
@@ -47,10 +48,12 @@ const uploadImages = async (req, res, next) => {
 
 
                 let imageName = imagesUploaded.name;
-                await imagesUploaded.mv(`${filePath}${imageName}`, async (err) => {
-                    if (err) {
-                        console.log('err, ' + err.message)
-                        res.send({err2: err.message})
+                await sharp(imagesUploaded.data).resize({
+                    width: 80,
+                }).toFile(`${filePath}${imageName}`,(err, info) => {
+                    console.log(info)
+                    if(err){
+                        res.send({err: err})
                     }
                     res.send({
                         status: true,
@@ -59,7 +62,6 @@ const uploadImages = async (req, res, next) => {
                             `${url.server}/images/${imageName}`
                         ]
                     })
-
                 })
             }
         }
@@ -89,19 +91,21 @@ const uploadIcons = async (req, res, next) => {
                 const paths = []
                 iconsUploaded.map(async (file) => {
                     const fileName = file.name
-                    await file.mv(`${filePath}${fileName}`, async (err) => {
-                        if (err) {
-                            res.send({
-                                status: false,
-                                message: err.message
-                            })
+                    await sharp(file.data).resize({
+                        width: 80,
+                    }).toFile(`${filePath}${fileName}`,(err, info) => {
+                        console.log(info)
+                        if(err){
+                            res.send({err: err})
                         }
                         console.log('upload mas ', `${filePath}${fileName}`)
                         paths.push(`${url.server}/icons/${fileName}`)
                         if (iconsUploaded.length === paths.length) {
+                            console.log('SAMA')
+                            // console.log(Array.isArray(paths))
                             res.send({
                                 status: true,
-                                message: 'Upload Icons Success',
+                                message: 'Upload Banner Success',
                                 data: paths
                             })
                         }
@@ -116,19 +120,20 @@ const uploadIcons = async (req, res, next) => {
 
 
                 let iconName = iconsUploaded.name;
-                await iconsUploaded.mv(`${filePath}${iconName}`, async (err) => {
-                    if (err) {
-                        console.log('err, ' + err.message)
-                        res.send({err2: err.message})
+                await sharp(iconsUploaded.data).resize({
+                    width: 80,
+                }).toFile(`${filePath}${iconName}`,(err, info) => {
+                    console.log(info)
+                    if(err){
+                        res.send({err: err})
                     }
                     res.send({
                         status: true,
-                        message: 'Upload Icons Success',
+                        message: 'Upload Banner Success',
                         data: [
                             `${url.server}/icons/${iconName}`
                         ]
                     })
-
                 })
             }
         }
@@ -158,12 +163,12 @@ const uploadBanner = async (req, res, next) => {
                 const paths = []
                 imagesUploaded.map(async (file) => {
                     const fileName = file.name
-                    await file.mv(`${filePath}${fileName}`, async (err) => {
-                        if (err) {
-                            res.send({
-                                status: false,
-                                message: err.message
-                            })
+                    await sharp(file.data).resize({
+                        width: 200,
+                    }).toFile(`${filePath}${fileName}`,(err, info) => {
+                        console.log(info)
+                        if(err){
+                            res.send({err: err})
                         }
                         console.log('upload mas ', `${filePath}${fileName}`)
                         paths.push(`${url.server}/banner/${fileName}`)
@@ -177,20 +182,19 @@ const uploadBanner = async (req, res, next) => {
                             })
                         }
                     })
-
                 })
             } else {
                 // console.log("Upload Single")
                 console.log(imagesUploaded)
                 // const fileKu = `${filePath}`
                 console.log('hehe ', filePath)
-
-
                 let imageName = imagesUploaded.name;
-                await imagesUploaded.mv(`${filePath}${imageName}`, async (err) => {
-                    if (err) {
-                        console.log('err, ' + err.message)
-                        res.send({err2: err.message})
+                await sharp(imagesUploaded.data).resize({
+                    width: 200,
+                }).toFile(`${filePath}${imageName}`,(err, info) => {
+                    console.log(info)
+                    if(err){
+                        res.send({err: err})
                     }
                     res.send({
                         status: true,
@@ -199,7 +203,6 @@ const uploadBanner = async (req, res, next) => {
                             `${url.server}/banner/${imageName}`
                         ]
                     })
-
                 })
             }
         }
