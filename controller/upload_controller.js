@@ -49,7 +49,7 @@ const uploadImages = async (req, res, next) => {
 
                 let imageName = imagesUploaded.name;
                 await sharp(imagesUploaded.data).resize({
-                    width: 80,
+                    width: 600,
                 }).toFile(`${filePath}${imageName}`,(err, info) => {
                     console.log(info)
                     if(err){
