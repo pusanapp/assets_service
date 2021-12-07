@@ -6,6 +6,7 @@ const fileUpload = require('express-fileupload');
 const cors = require('cors')
 
 const indexRouter = require('./routes/index');
+const contactRouter = require('./routes/admin_contact_route')
 const app = express();
 
 app.use(fileUpload({
@@ -20,5 +21,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/api/v1/admin/contact', contactRouter)
 
 module.exports = app;
